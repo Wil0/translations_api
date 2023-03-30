@@ -1,4 +1,15 @@
 class GlossariesController < ApplicationController
+  def index
+    render json: Glossary.all, status: 200, each_serializer: GlossarySerializer
+  end
+
+  def show
+    glossary = Glossary.find_by(id: params[:id])
+    return render json: {}, status: 200 unless glossary
+
+    render json: glossary, status: 200, serializer: GlossarySerializer
+  end
+
   def create
     errors = GlossaryCreateService.new(glossary_params).run
 

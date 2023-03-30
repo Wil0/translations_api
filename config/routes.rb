@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :glossaries, only: [:create]
+  resources :glossaries, only: %i[index show create]
 end

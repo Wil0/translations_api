@@ -1,5 +1,41 @@
 RSpec.describe 'Glossaries', type: :request do
-  describe 'POST /create' do
+  describe 'GET /glossaries' do
+    it 'returns the glossary with all the terms' do
+      get '/glossaries'
+
+      json_response = JSON.parse(response.body)
+
+      expect(response).to have_http_status(:ok)
+      expect(json_response).to eq([{ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa' }])
+    end
+  end
+
+  describe 'GET /glossaries/:id' do
+    context 'glossary exists' do
+      it 'returns the glossary' do
+        glossary_id = Glossary.first.id
+        get "/glossaries/#{glossary_id}"
+
+        json_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(json_response).to eq({ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa' })
+      end
+    end
+
+    context 'glossary does not exist' do
+      it 'returns empty' do
+        get '/glossaries/-1'
+
+        json_response = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(json_response).to be_empty
+      end
+    end
+  end
+
+  describe 'POST /glossaries' do
     context 'valid params' do
       let(:params) do
         { glossary: { source_language_code: LanguageCode.last.code, target_language_code: LanguageCode.first.code } }
