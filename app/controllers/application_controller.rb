@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
-  def not_found(_exception)
-    render json: { errors: 'Record not found' }, status: 422
+  def not_found(exception)
+    render json: { errors: "#{exception.model} record not found with the attributes provided" }, status: 422
   end
 
   def show_record_errors(exception)

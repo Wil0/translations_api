@@ -32,7 +32,7 @@ RSpec.describe 'Glossaries', type: :request do
         json_response = JSON.parse(response.body)
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response).to eq({ 'errors' => 'Record not found' })
+        expect(json_response).to eq({ 'errors' => 'Glossary record not found with the attributes provided' })
       end
     end
   end
@@ -84,7 +84,7 @@ RSpec.describe 'Glossaries', type: :request do
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(json_response).to eq({ 'errors' => 'Record not found' })
+          expect(json_response).to eq({ 'errors' => 'LanguageCode record not found with the attributes provided' })
         end
       end
 
@@ -100,7 +100,7 @@ RSpec.describe 'Glossaries', type: :request do
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(json_response).to eq({ 'errors' => 'Record not found' })
+          expect(json_response).to eq({ 'errors' => 'LanguageCode record not found with the attributes provided' })
         end
       end
     end
