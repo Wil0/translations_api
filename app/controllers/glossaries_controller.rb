@@ -1,23 +1,19 @@
 class GlossariesController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordInvalid, with: :show_record_errors
+
   def index
     render json: Glossary.all, status: 200, each_serializer: GlossarySerializer
   end
 
   def show
-    glossary = Glossary.find_by(id: params[:id])
-    return render json: {}, status: 200 unless glossary
-
+    glossary = Glossary.find(params[:id])
     render json: glossary, status: 200, serializer: GlossarySerializer
   end
 
   def create
-    errors = GlossaryCreateService.new(glossary_params).run
-
-    if errors.any?
-      render json: { errors: }, status: 422
-    else
-      render json: {}, status: 201
-    end
+    glossary = GlossaryCreateService.new(glossary_params).run
+    render json: glossary, status: 201, serializer: GlossarySerializer
   end
 
   private

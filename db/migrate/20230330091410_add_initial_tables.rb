@@ -8,12 +8,6 @@ class AddInitialTables < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    create_table :terms do |t|
-      t.string :field
-
-      t.timestamps
-    end
-
     create_table :language_codes do |t|
       t.string :code
       t.string :country

@@ -9,4 +9,6 @@ end
 
 source_language_code = LanguageCode.first.code
 target_language_code = LanguageCode.last.code
-Glossary.create!(source_language_code:, target_language_code:)
+glossary = Glossary.create!(source_language_code:, target_language_code:)
+glossary.terms.create!(source_term: 'hello', target_term: 'hola')
+

@@ -16,8 +16,9 @@ RSpec.describe GlossaryCreateService, type: :service do
           invalid_params = { source_language_code: 'xx', target_language_code: 'YY' }
           glossary_service = GlossaryCreateService.new(invalid_params)
 
-          expect { glossary_service.run }.not_to change(Glossary, :count)
-          expect(glossary_service.errors).to contain_exactly('source is not valid.', 'target is not valid.')
+          expect do
+            glossary_service.run
+          end.to raise_error(ActiveRecord::RecordNotFound).and change(Glossary, :count).by(0)
         end
       end
 
@@ -30,8 +31,9 @@ RSpec.describe GlossaryCreateService, type: :service do
 
           glossary_service = GlossaryCreateService.new(invalid_params)
 
-          expect { glossary_service.run }.not_to change(Glossary, :count)
-          expect(glossary_service.errors).to contain_exactly('target is not valid.')
+          expect do
+            glossary_service.run
+          end.to raise_error(ActiveRecord::RecordNotFound).and change(Glossary, :count).by(0)
         end
       end
     end

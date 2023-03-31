@@ -6,7 +6,8 @@ RSpec.describe 'Glossaries', type: :request do
       json_response = JSON.parse(response.body)
 
       expect(response).to have_http_status(:ok)
-      expect(json_response).to eq([{ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa' }])
+      expect(json_response).to eq([{ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa',
+                                     'terms' => [{ 'id' => 1, 'source_term' => 'hello', 'target_term' => 'hola' }] }])
     end
   end
 
@@ -19,7 +20,8 @@ RSpec.describe 'Glossaries', type: :request do
         json_response = JSON.parse(response.body)
 
         expect(response).to have_http_status(:ok)
-        expect(json_response).to eq({ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa' })
+        expect(json_response).to eq({ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa',
+                                      'terms' => [{ 'id' => 1, 'source_term' => 'hello', 'target_term' => 'hola' }] })
       end
     end
 
@@ -29,8 +31,8 @@ RSpec.describe 'Glossaries', type: :request do
 
         json_response = JSON.parse(response.body)
 
-        expect(response).to have_http_status(:ok)
-        expect(json_response).to be_empty
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response).to eq({ 'errors' => 'Record not found' })
       end
     end
   end
@@ -38,11 +40,18 @@ RSpec.describe 'Glossaries', type: :request do
   describe 'POST /glossaries' do
     context 'valid params' do
       let(:params) do
-        { glossary: { source_language_code: LanguageCode.last.code, target_language_code: LanguageCode.first.code } }
+        { glossary: { source_language_code: 'en', target_language_code: 'es' } }
       end
       it 'returns http success' do
-        expect { post('/glossaries', params:) }.to change(Glossary, :count)
+        post('/glossaries', params:)
+
+        json_response = JSON.parse(response.body)
+
         expect(response).to have_http_status(:created)
+        expect(json_response).to eq({ 'id' => 2,
+                                      'source_language_code' => 'en',
+                                      'target_language_code' => 'es',
+                                      'terms' => [] })
       end
     end
 
@@ -59,7 +68,7 @@ RSpec.describe 'Glossaries', type: :request do
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(json_response).to eq({ 'errors' => ['Validation failed: Source language code has already been taken'] })
+          expect(json_response).to eq({ 'errors' => 'Source language code has already been taken' })
         end
       end
 
@@ -75,7 +84,7 @@ RSpec.describe 'Glossaries', type: :request do
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(json_response).to eq({ 'errors' => ['target is not valid.'] })
+          expect(json_response).to eq({ 'errors' => 'Record not found' })
         end
       end
 
@@ -91,7 +100,7 @@ RSpec.describe 'Glossaries', type: :request do
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(json_response).to eq({ 'errors' => ['source is not valid.'] })
+          expect(json_response).to eq({ 'errors' => 'Record not found' })
         end
       end
     end
