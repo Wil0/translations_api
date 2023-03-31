@@ -6,7 +6,7 @@ RSpec.describe 'Translations', type: :request do
   describe 'GET /show' do
     context 'Translation record does not exist' do
       it 'returns not found' do
-        get '/translations/-1'
+        get '/api//translations/-1'
 
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
@@ -15,7 +15,7 @@ RSpec.describe 'Translations', type: :request do
 
       context 'Translation record does exist' do
         it 'returns not found' do
-          get '/translations/1'
+          get '/api//translations/1'
 
           json_response = JSON.parse(response.body)
           expected_json = {
@@ -41,7 +41,7 @@ RSpec.describe 'Translations', type: :request do
       end
 
       it 'creates a Translation record' do
-        post('/translations', params:)
+        post('/api/translations', params:)
 
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:created)
@@ -60,7 +60,7 @@ RSpec.describe 'Translations', type: :request do
       end
       context 'no source_text provided' do
         it 'returns errors' do
-          post('/translations', params: invalid_params)
+          post('/api/translations', params: invalid_params)
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
@@ -71,7 +71,7 @@ RSpec.describe 'Translations', type: :request do
       context 'source_text is too long' do
         it 'returns errors' do
           invalid_params[:translation][:source_text] = 'a' * 5001
-          post('/translations', params: invalid_params)
+          post('/api/translations', params: invalid_params)
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
@@ -83,7 +83,7 @@ RSpec.describe 'Translations', type: :request do
         it 'returns errors' do
           invalid_params[:translation][:source_text] = 'some text'
           invalid_params[:translation][:glossary_id] = 99_999
-          post('/translations', params: invalid_params)
+          post('/api/translations', params: invalid_params)
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)

@@ -9,7 +9,7 @@ RSpec.describe 'Terms', type: :request do
           target_term: 'adios'
         } }
 
-        post("/glossaries/#{Glossary.first.id}/terms", params:)
+        post("/api/glossaries/#{Glossary.first.id}/terms", params:)
         json_response = JSON.parse(response.body)
 
         expect(response).to have_http_status(:created)
@@ -27,7 +27,7 @@ RSpec.describe 'Terms', type: :request do
 
       describe 'Term record already exists' do
         it 'returns an error' do
-          post("/glossaries/#{Glossary.first.id}/terms", params:)
+          post("/api/glossaries/#{Glossary.first.id}/terms", params:)
 
           json_response = JSON.parse(response.body)
           errors = 'Source term has already been taken'
@@ -39,7 +39,7 @@ RSpec.describe 'Terms', type: :request do
 
       describe 'Glossary record does not exist' do
         it 'returns an error' do
-          post('/glossaries/-1/terms', params:)
+          post('/api/glossaries/-1/terms', params:)
           json_response = JSON.parse(response.body)
 
           expect(response).to have_http_status(:unprocessable_entity)

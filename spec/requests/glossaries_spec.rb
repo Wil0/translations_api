@@ -1,7 +1,7 @@
 RSpec.describe 'Glossaries', type: :request do
   describe 'GET /glossaries' do
     it 'returns the glossary with all the terms' do
-      get '/glossaries'
+      get '/api/glossaries'
 
       json_response = JSON.parse(response.body)
       expected_json = [{ 'id' => 1, 'source_language_code' => 'en', 'target_language_code' => 'es',
@@ -16,7 +16,7 @@ RSpec.describe 'Glossaries', type: :request do
     context 'glossary exists' do
       it 'returns the glossary' do
         glossary_id = Glossary.first.id
-        get "/glossaries/#{glossary_id}"
+        get "/api/glossaries/#{glossary_id}"
 
         json_response = JSON.parse(response.body)
 
@@ -33,7 +33,7 @@ RSpec.describe 'Glossaries', type: :request do
 
     context 'glossary does not exist' do
       it 'returns empty' do
-        get '/glossaries/-1'
+        get '/api/glossaries/-1'
 
         json_response = JSON.parse(response.body)
 
@@ -50,7 +50,7 @@ RSpec.describe 'Glossaries', type: :request do
       end
 
       it 'returns http success' do
-        post('/glossaries', params:)
+        post('/api/glossaries', params:)
 
         json_response = JSON.parse(response.body)
         expected_json = {
@@ -74,7 +74,7 @@ RSpec.describe 'Glossaries', type: :request do
               target_language_code: Glossary.last.target_language_code
             } }
 
-          post('/glossaries', params:)
+          post('/api/glossaries', params:)
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
@@ -90,7 +90,7 @@ RSpec.describe 'Glossaries', type: :request do
                 target_language_code: 'XX'
               } }
 
-          post('/glossaries', params:)
+          post('/api/glossaries', params:)
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
@@ -106,7 +106,7 @@ RSpec.describe 'Glossaries', type: :request do
                 target_language_code: Glossary.first.source_language_code
               } }
 
-          post('/glossaries', params:)
+          post('/api/glossaries', params:)
 
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)

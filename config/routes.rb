@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  get 'translations/create'
-  resources :glossaries, only: %i[index show create] do
-    resources :terms, only: [:create]
-  end
+  scope :api, defaults: { format: :json } do
+    resources :glossaries, only: %i[index show create] do
+      resources :terms, only: [:create]
+    end
 
-  resources :translations, only: %i[create show]
+    resources :translations, only: %i[create show]
+  end
 end
