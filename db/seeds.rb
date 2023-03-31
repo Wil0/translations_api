@@ -7,8 +7,11 @@ csv.each do |row|
   LanguageCode.create!(row.to_hash)
 end
 
-source_language_code = LanguageCode.first.code
-target_language_code = LanguageCode.last.code
+source_language_code = "en"
+target_language_code = "es"
 glossary = Glossary.create!(source_language_code:, target_language_code:)
-glossary.terms.create!(source_term: 'hello', target_term: 'hola')
+
+terms_list = [{source_term: 'recruitment', target_term: 'reclutamiento'}]
+glossary.terms.create!(terms_list)
+glossary.translations.create!(source_text: "This is a recruitment task.")
 

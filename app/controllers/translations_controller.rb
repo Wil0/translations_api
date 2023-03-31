@@ -7,6 +7,11 @@ class TranslationsController < ApplicationController
     render json: translation, status: :created, serializer: TranslationSerializer
   end
 
+  def show
+    translation = TranslationFetchService.new(params[:id]).run
+    render json: translation, status: :ok
+  end
+
   private
 
   def translation_params

@@ -3,6 +3,34 @@ require 'rails_helper'
 RSpec.describe 'Translations', type: :request do
   let(:glossary) { Glossary.first }
 
+  describe 'GET /show' do
+    context 'Translation record does not exist' do
+      it 'returns not found' do
+        get '/translations/-1'
+
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response).to eq({ 'errors' => 'Translation record not found with the attributes provided' })
+      end
+
+      context 'Translation record does exist' do
+        it 'returns not found' do
+          get '/translations/1'
+
+          json_response = JSON.parse(response.body)
+          expected_json = {
+            'source_text' => 'This is a recruitment task.',
+            'glossary_terms' => ['recruitment'],
+            'highlighted_source_text' => 'This is a <HIGHLIGHT>recruitment</HIGHLIGHT> task.'
+          }
+
+          expect(response).to have_http_status(:ok)
+          expect(json_response).to eq(expected_json)
+        end
+      end
+    end
+  end
+
   describe 'POST /create' do
     context 'valid params' do
       let(:params) do
@@ -18,7 +46,7 @@ RSpec.describe 'Translations', type: :request do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:created)
         expect(json_response).to eq({ 'glossary_id' => 1,
-                                      'id' => 1,
+                                      'id' => 2,
                                       'source_text' => 'some text to translate' })
       end
     end

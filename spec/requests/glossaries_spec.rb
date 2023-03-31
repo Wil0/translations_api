@@ -4,10 +4,11 @@ RSpec.describe 'Glossaries', type: :request do
       get '/glossaries'
 
       json_response = JSON.parse(response.body)
+      expected_json = [{ 'id' => 1, 'source_language_code' => 'en', 'target_language_code' => 'es',
+                         'terms' => [{ 'id' => 1, 'source_term' => 'recruitment', 'target_term' => 'reclutamiento' }] }]
 
       expect(response).to have_http_status(:ok)
-      expect(json_response).to eq([{ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa',
-                                     'terms' => [{ 'id' => 1, 'source_term' => 'hello', 'target_term' => 'hola' }] }])
+      expect(json_response).to eq(expected_json)
     end
   end
 
@@ -20,8 +21,13 @@ RSpec.describe 'Glossaries', type: :request do
         json_response = JSON.parse(response.body)
 
         expect(response).to have_http_status(:ok)
-        expect(json_response).to eq({ 'id' => 1, 'target_language_code' => 'zu', 'source_language_code' => 'aa',
-                                      'terms' => [{ 'id' => 1, 'source_term' => 'hello', 'target_term' => 'hola' }] })
+        expect(json_response).to eq({
+                                      'id' => 1,
+                                      'source_language_code' => 'en',
+                                      'target_language_code' => 'es',
+                                      'terms' => [{ 'id' => 1, 'source_term' => 'recruitment',
+                                                    'target_term' => 'reclutamiento' }]
+                                    })
       end
     end
 
@@ -40,18 +46,22 @@ RSpec.describe 'Glossaries', type: :request do
   describe 'POST /glossaries' do
     context 'valid params' do
       let(:params) do
-        { glossary: { source_language_code: 'en', target_language_code: 'es' } }
+        { glossary: { source_language_code: 'it', target_language_code: 'es' } }
       end
+
       it 'returns http success' do
         post('/glossaries', params:)
 
         json_response = JSON.parse(response.body)
+        expected_json = {
+          'id' => 2,
+          'source_language_code' => 'it',
+          'target_language_code' => 'es',
+          'terms' => []
+        }
 
         expect(response).to have_http_status(:created)
-        expect(json_response).to eq({ 'id' => 2,
-                                      'source_language_code' => 'en',
-                                      'target_language_code' => 'es',
-                                      'terms' => [] })
+        expect(json_response).to eq(expected_json)
       end
     end
 

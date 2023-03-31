@@ -4,5 +4,5 @@ Rails.application.routes.draw do
     resources :terms, only: [:create]
   end
 
-  resources :translations, only: [:create]
+  resources :translations, only: %i[create show]
 end
