@@ -20,18 +20,23 @@ class TranslationFetchService
   end
 
   def glossary_terms
-    translation_source_text_terms = translation.source_text.split.map(&:downcase)
+    translation_source_text_terms.map(&:downcase)
     @glossary_terms ||= translation.terms
-                                   .select(:source_term)
                                    .where(source_term: translation_source_text_terms)
-                                   .map(&:source_term)
+                                   .pluck(:source_term)
+  end
+
+  def highlighted_source_text
+    translation_source_text_terms.map do |word|
+      glossary_terms.include?(word) ? "<HIGHLIGHT>#{word}</HIGHLIGHT>" : word
+    end
+  end
+
+  def translation_source_text_terms
+    translation.source_text.gsub('.', '').strip.split
   end
 
   def translation
     @translation ||= Translation.find(translation_id)
-  end
-
-  def highlighted_source_text
-    translation.source_text.split.map { |word| glossary_terms.include?(word) ? "<HIGHLIGHT>#{word}</HIGHLIGHT>" : word }
   end
 end

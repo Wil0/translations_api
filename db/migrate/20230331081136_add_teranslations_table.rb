@@ -4,7 +4,7 @@ class AddTeranslationsTable < ActiveRecord::Migration[7.0]
       t.text :source_text, null: false
       t.references :glossary
 
-       t.timestamps
+      t.timestamps
     end
   end
 end
