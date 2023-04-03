@@ -1,4 +1,5 @@
 require 'csv'
+require_relative '../lib/language_code.rb'
 
 text_file = File.read(Rails.root.join('lib', 'language-codes.csv'))
 csv = CSV.parse(text_file, headers: true, encoding: 'utf-8')

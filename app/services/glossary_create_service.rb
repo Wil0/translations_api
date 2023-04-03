@@ -1,3 +1,5 @@
+require_relative '../../lib/language_code'
+
 class GlossaryCreateService
   def initialize(glossary_params)
     @source_language_code = glossary_params.fetch(:source_language_code, nil)
