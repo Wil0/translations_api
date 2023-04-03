@@ -1,6 +1,4 @@
 class TranslationFetchService
-  attr_reader :translation_id
-
   def initialize(translation_id)
     @translation_id = translation_id
   end
@@ -10,6 +8,8 @@ class TranslationFetchService
   end
 
   private
+
+  attr_reader :translation_id
 
   def fetch_translation
     {

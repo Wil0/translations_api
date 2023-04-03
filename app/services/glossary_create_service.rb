@@ -1,6 +1,4 @@
 class GlossaryCreateService
-  attr_reader :source_language_code, :target_language_code
-
   def initialize(glossary_params)
     @source_language_code = glossary_params.fetch(:source_language_code, nil)
     @target_language_code = glossary_params.fetch(:target_language_code, nil)
@@ -11,6 +9,8 @@ class GlossaryCreateService
   end
 
   private
+
+  attr_reader :source_language_code, :target_language_code
 
   def create
     check_params_presence

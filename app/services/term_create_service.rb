@@ -1,6 +1,4 @@
 class TermCreateService
-  attr_reader :glossary_id, :source_term, :target_term
-
   def initialize(glossary_id, term_parmas)
     @glossary_id = glossary_id
     @source_term = term_parmas.fetch(:source_term, nil)
@@ -12,6 +10,8 @@ class TermCreateService
   end
 
   private
+
+  attr_reader :glossary_id, :source_term, :target_term
 
   def create
     glossary.terms.create!(source_term: source_term&.downcase, target_term: target_term&.downcase)

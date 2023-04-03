@@ -2,8 +2,6 @@ class InvalidParamsError < StandardError
 end
 
 class TranslationCreateService
-  attr_reader :source_language_code, :target_language_code, :source_text, :glossary_id
-
   def initialize(translation_params)
     @source_language_code = translation_params.fetch(:source_language_code, nil)
     @target_language_code = translation_params.fetch(:target_language_code, nil)
@@ -16,6 +14,8 @@ class TranslationCreateService
   end
 
   private
+
+  attr_reader :source_language_code, :target_language_code, :source_text, :glossary_id
 
   def create
     if !source_language_code || !target_language_code
@@ -31,6 +31,5 @@ class TranslationCreateService
                   else
                     Glossary.find_by!(source_language_code:, target_language_code:)
                   end
-    @glossary
   end
 end
