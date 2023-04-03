@@ -1,12 +1,9 @@
 module Api
   module V1
     class TranslationsController < ApplicationController
-      rescue_from ActiveRecord::RecordNotFound, with: :not_found
-      rescue_from ActiveRecord::RecordInvalid, with: :show_record_errors
-
       def create
         translation = TranslationCreateService.new(translation_params).run
-        render json: translation, status: :created, serializer: TranslationSerializer
+        serialize_object(object: translation, serializer: TranslationSerializer, status: :created)
       end
 
       def show

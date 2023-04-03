@@ -1,9 +1,7 @@
 class ApplicationController < ActionController::API
-  def not_found(exception)
-    render json: { errors: "#{exception.model} record not found with the attributes provided" }, status: 422
-  end
+  include ResponseHandler
+  include ExceptionsHandler
 
-  def show_record_errors(exception)
-    render json: { errors: exception.record.errors.full_messages.to_sentence }, status: 422
-  end
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordInvalid, with: :show_record_errors
 end
