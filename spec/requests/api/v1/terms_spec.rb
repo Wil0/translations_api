@@ -1,6 +1,4 @@
-require 'rails_helper'
-
-RSpec.describe 'Terms', type: :request do
+RSpec.describe Api::V1::TermsController, type: :request do
   describe 'POST /create' do
     context 'valid params' do
       it 'creates a record' do
@@ -9,7 +7,7 @@ RSpec.describe 'Terms', type: :request do
           target_term: 'adios'
         } }
 
-        post("/api/glossaries/#{Glossary.first.id}/terms", params:)
+        post("/api/v1/glossaries/#{Glossary.first.id}/terms", params:)
 
         expect(response).to have_http_status(:created)
         expect(json_response).to eq({ 'id' => 2, 'source_term' => 'bye', 'target_term' => 'adios' })
@@ -26,7 +24,7 @@ RSpec.describe 'Terms', type: :request do
 
       describe 'Term record already exists' do
         it 'returns an error' do
-          post("/api/glossaries/#{Glossary.first.id}/terms", params:)
+          post("/api/v1/glossaries/#{Glossary.first.id}/terms", params:)
 
           errors = 'Source term has already been taken'
 
@@ -37,7 +35,7 @@ RSpec.describe 'Terms', type: :request do
 
       describe 'Glossary record does not exist' do
         it 'returns an error' do
-          post('/api/glossaries/-1/terms', params:)
+          post('/api/v1/glossaries/-1/terms', params:)
 
           expect(response).to have_http_status(:unprocessable_entity)
           expect(json_response).to eq({ 'errors' => 'Glossary record not found with the attributes provided' })
