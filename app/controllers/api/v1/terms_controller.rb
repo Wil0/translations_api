@@ -2,14 +2,14 @@ module Api
   module V1
     class TermsController < ApplicationController
       def create
-        term = TermCreateService.new(glossary_id, term_params).run
-        serialize_object(object: term, serializer: TermSerializer, status: 201)
+        terms = TermCreateService.new(glossary_id, terms_params).run
+        serialize_collection(collection: terms, serializer: TermSerializer, status: 201)
       end
 
       private
 
-      def term_params
-        params.require(:term).permit(:source_term, :target_term)
+      def terms_params
+        params.permit(terms: %i[source_term target_term]).require(:terms)
       end
 
       def glossary_id

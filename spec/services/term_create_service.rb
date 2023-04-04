@@ -2,19 +2,19 @@ RSpec.describe TermCreateService, type: :service do
   describe '.run' do
     let(:glossary_id) { Glossary.first.id }
     let(:params) do
-      { source_term: 'this', target_term: 'esto' }
+      [{ source_term: 'this', target_term: 'esto' }, { source_term: 'that', target_term: 'eso' }]
     end
 
     context 'valid params' do
       it 'creates a Term record' do
-        expect { TermCreateService.new(glossary_id, params).run }.to change(Term, :count).by(1)
+        expect { TermCreateService.new(glossary_id, params).run }.to change(Term, :count).by(2)
       end
     end
 
     context 'invalid params' do
       describe 'source_term is not provided' do
         it 'does not create a Term record' do
-          invalid_params = { target_term: 'YY' }
+          invalid_params = [{ source_term: 'casa', target_term: 'house' }, { target_term: 'eso' }]
           term_service = TermCreateService.new(glossary_id, invalid_params)
 
           expect do
@@ -26,7 +26,7 @@ RSpec.describe TermCreateService, type: :service do
 
       describe 'target_term is not provided' do
         it 'does not create a Term record' do
-          invalid_params = { source_term: 'YY' }
+          invalid_params = [{ source_term: 'YY' }]
           term_service = TermCreateService.new(glossary_id, invalid_params)
 
           expect do

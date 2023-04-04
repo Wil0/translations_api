@@ -1,8 +1,7 @@
 class TermCreateService
-  def initialize(glossary_id, term_parmas)
+  def initialize(glossary_id, term_params)
     @glossary_id = glossary_id
-    @source_term = term_parmas.fetch(:source_term, nil)
-    @target_term = term_parmas.fetch(:target_term, nil)
+    @term_params = term_params
   end
 
   def run
@@ -11,10 +10,11 @@ class TermCreateService
 
   private
 
-  attr_reader :glossary_id, :source_term, :target_term
+  attr_reader :glossary_id, :term_params
 
   def create
-    glossary.terms.create!(source_term: source_term&.downcase, target_term: target_term&.downcase)
+    term_params.map { |group| group.each { |k, v| group[k] = v&.downcase } }
+    glossary.terms.create!(term_params)
   end
 
   def glossary
