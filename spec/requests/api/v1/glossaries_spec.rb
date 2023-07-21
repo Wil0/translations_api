@@ -3,7 +3,7 @@ RSpec.describe Api::V1::GlossariesController, type: :request do
     it 'returns the glossary with all the terms' do
       get '/api/v1/glossaries'
       expected_json = [{ 'id' => 1, 'source_language_code' => 'en', 'target_language_code' => 'es',
-                         'terms' => [{ 'id' => 1, 'source_term' => 'recruitment', 'target_term' => 'reclutamiento' }] }]
+                         'terms' => [{ 'id' => 1, 'source_term' => 'cup', 'target_term' => 'taza' }] }]
 
       expect(response).to have_http_status(:ok)
       expect(json_response).to eq(expected_json)
@@ -21,8 +21,7 @@ RSpec.describe Api::V1::GlossariesController, type: :request do
                                       'id' => 1,
                                       'source_language_code' => 'en',
                                       'target_language_code' => 'es',
-                                      'terms' => [{ 'id' => 1, 'source_term' => 'recruitment',
-                                                    'target_term' => 'reclutamiento' }]
+                                      'terms' => [{ 'id' => 1, 'source_term' => 'cup', 'target_term' => 'taza' }]
                                     })
       end
     end

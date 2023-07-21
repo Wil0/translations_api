@@ -14,9 +14,9 @@ RSpec.describe Api::V1::TranslationsController, type: :request do
           get '/api/v1/translations/1'
 
           expected_json = {
-            'source_text' => 'This is a recruitment task.',
-            'glossary_terms' => ['recruitment'],
-            'highlighted_source_text' => 'This is a <HIGHLIGHT>recruitment</HIGHLIGHT> task'
+            'source_text' => 'This is a cup for you.',
+            'glossary_terms' => ['cup'],
+            'highlighted_source_text' => 'This is a <HIGHLIGHT>cup</HIGHLIGHT> for you'
           }
 
           expect(response).to have_http_status(:ok)

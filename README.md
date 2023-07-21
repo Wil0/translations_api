@@ -13,7 +13,7 @@ Once a glossary has terms mapping the two different languages, a translation for
 Translations will highlight the terms selected to be translated.
 
 Example:
-Given an user provides the English sentence "This is a cup for you", where "cup" is the word to be translated to Spanish, the user will receive back "This is a <HIGHLIGHT>cup</HIGHLIGHT> for you"
+Given an user provides the English sentence `"This is a cup for you"`, where `"cup"` is the word to be translated to Spanish, the user will receive back `"This is a <HIGHLIGHT>cup</HIGHLIGHT> for you"`
 
 ## Running the application with Docker
 
@@ -137,8 +137,8 @@ curl --location 'http://127.0.0.1:3000/api/v1/glossaries/1/terms' \
 
 {
     "id": 2,
-    "source_term": "ciao",
-    "target_term": "hola"
+    "source_term" : "this",
+    "target_term" : "esto"
 }
 
 ```

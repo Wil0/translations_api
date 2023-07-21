@@ -14,5 +14,5 @@ glossary = Glossary.create!(source_language_code:, target_language_code:)
 
 terms_list = [{source_term: 'cup', target_term: 'taza'}]
 glossary.terms.create!(terms_list)
-glossary.translations.create!(source_text: "This is a cup for you.")
+glossary.translations.create!(source_text: "This is a cup for you")
 
