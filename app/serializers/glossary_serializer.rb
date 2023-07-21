@@ -1,4 +1,4 @@
 class GlossarySerializer < ActiveModel::Serializer
-  attributes :id, :target_language_code, :source_language_code
+  attributes :id, :source_language_code, :target_language_code
   has_many :terms
 end

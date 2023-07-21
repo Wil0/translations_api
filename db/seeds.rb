@@ -12,7 +12,7 @@ source_language_code = "en"
 target_language_code = "es"
 glossary = Glossary.create!(source_language_code:, target_language_code:)
 
-terms_list = [{source_term: 'recruitment', target_term: 'reclutamiento'}]
+terms_list = [{source_term: 'cup', target_term: 'taza'}]
 glossary.terms.create!(terms_list)
-glossary.translations.create!(source_text: "This is a recruitment task.")
+glossary.translations.create!(source_text: "This is a cup for you.")
 

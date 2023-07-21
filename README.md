@@ -1,5 +1,20 @@
 # README
 
+## Purpose
+
+This API-only application implements a translation highlight between two diferent languages.
+
+The API gives information about the existing dictionaries (called glossaries) as well as the option to create new ones.
+
+Once a glossary is created, new terms can be added to it, so transaltions are possible between the given languages.
+
+Once a glossary has terms mapping the two different languages, a translation for a given sentence can be created and later on retrieved.
+
+Translations will highlight the terms selected to be translated.
+
+Example:
+Given an user provides the English sentence "This is a cup for you", where "cup" is the word to be translated to Spanish, the user will receive back "This is a <HIGHLIGHT>cup</HIGHLIGHT> for you"
+
 ## Running the application with Docker
 
 - Firstly, cd into the application folder
@@ -42,7 +57,7 @@
 ```
 # Getting glossaries data:
 
-curl --location --request GET 'http://127.0.0.1:3000/api/glossaries' \
+curl --location --request GET 'http://127.0.0.1:3000/api/v1/glossaries' \
 --header 'Content-Type: application/json' | json_pp
 
 # Will produce:
@@ -55,8 +70,8 @@ curl --location --request GET 'http://127.0.0.1:3000/api/glossaries' \
         "terms": [
             {
                 "id": 1,
-                "source_term": "recruitment",
-                "target_term": "reclutamiento"
+                "target_term": "taza",
+                "source_term": "cup"
             }
         ]
     }
@@ -66,7 +81,7 @@ curl --location --request GET 'http://127.0.0.1:3000/api/glossaries' \
 ```
 # Fetching on specific glossary:
 
-curl --location --request GET 'http://127.0.0.1:3000/api/glossaries/1' \
+curl --location --request GET 'http://127.0.0.1:3000/api/v1/glossaries/1' \
 --header 'Content-Type: application/json' | json_pp
 
 # Will produce:
@@ -78,8 +93,8 @@ curl --location --request GET 'http://127.0.0.1:3000/api/glossaries/1' \
     "terms": [
         {
             "id": 1,
-            "source_term": "recruitment",
-            "target_term": "reclutamiento"
+            "target_term": "cup",
+            "source_term": "taza",
         }
     ]
 }
@@ -88,12 +103,12 @@ curl --location --request GET 'http://127.0.0.1:3000/api/glossaries/1' \
 ```
 # Create new glossaries is possible:
 
-curl --location 'http://127.0.0.1:3000/api/glossaries' \
+curl --location 'http://127.0.0.1:3000/api/v1/glossaries' \
 --header 'Content-Type: application/json' \
 --data '{
     "glossary": {
-        "source_language_code": "it",
-        "target_language_code": "es"
+        "target_language_code": "en",
+        "source_language_code": "it"
     }
 }'
 
@@ -101,28 +116,28 @@ curl --location 'http://127.0.0.1:3000/api/glossaries' \
 
 {
     "id": 2,
-    "target_language_code": "es",
     "source_language_code": "it",
+    "target_language_code": "en",
     "terms": []
 }
 ```
 
 ```
 # As well as adding new terms:
-curl --location 'http://127.0.0.1:3000/api/glossaries/1/terms' \
+curl --location 'http://127.0.0.1:3000/api/v1/glossaries/1/terms' \
 --header 'Content-Type: application/json' \
 --data '{
-    "term": {
-        "source_term": "hello",
-        "target_term": "hola"
-    }
+    "terms": [{
+        "source_term": "this",
+        "target_term": "esto"
+    }]
 }' | json_pp
 
 # Will return:
 
 {
     "id": 2,
-    "source_term": "hello",
+    "source_term": "ciao",
     "target_term": "hola"
 }
 
@@ -131,13 +146,13 @@ curl --location 'http://127.0.0.1:3000/api/glossaries/1/terms' \
 ```
 # Translation can be created:
 
-curl --location 'http://127.0.0.1:3000/api/translations' \
+curl --location 'http://127.0.0.1:3000/api/v1/translations' \
 --header 'Content-Type: application/json' \
 --data '{
     "translation": {
-        "source_language_code": "it",
+        "source_language_code": "en",
         "target_language_code": "es",
-        "source_text": "translate this text"
+        "source_text": "This is a cup of coffee"
     }
 }' | json_pp
 
@@ -146,31 +161,31 @@ curl --location 'http://127.0.0.1:3000/api/translations' \
 {
     "id": 2,
     "glossary_id": 2,
-    "source_text": "translate this text"
+    "source_text": "This is a cup of coffee"
 }
 ```
 
 ```
 # Translations can be cheked too:
 
-curl --location --request GET 'http://127.0.0.1:3000/api/translations/1' \
+curl --location --request GET 'http://127.0.0.1:3000/api/v1/translations/1' \
 --header 'Content-Type: application/json' \
 --data '{
     "translation": {
-        "source_language_code": "it",
+        "source_language_code": "en",
         "target_language_code": "es",
-        "source_text": "translate this"
+        "source_text": "This is a cup of coffee"
     }
 }' | json_pp
 
 # Will return:
 
 {
-    "source_text": "This is a recruitment task.",
+    "source_text": "This is a cup of coffee",
     "glossary_terms": [
-        "recruitment"
+        "cup"
     ],
-    "highlighted_source_text": "This is a <HIGHLIGHT>recruitment</HIGHLIGHT> task."
+    "highlighted_source_text": "This is a white <HIGHLIGHT>cup</HIGHLIGHT>."
 }
 ```
 
